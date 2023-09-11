@@ -41,58 +41,7 @@ fun Details(text: String, flag: String , coa : String , flagDesc : String) {
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-//
-//        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-//            Text(
-//                text = "Google maps",
-//                modifier = Modifier.weight(1f),
-//                style = TextStyle(
-//                    fontWeight = FontWeight.Normal,
-//                    fontSize = 20.sp,
-//                    color = MaterialTheme.colorScheme.onBackground
-//                )
-//            )
-//
-//            Text(
-//                text = "Street maps",
-//                modifier = Modifier.weight(1f),
-//                style = TextStyle(
-//                    fontWeight = FontWeight.Normal,
-//                    fontSize = 20.sp,
-//                    color = MaterialTheme.colorScheme.onBackground
-//                )
-//            )
-//        }
-//
-//        Spacer(modifier = Modifier.height(4.dp))
-//
-//        Row(modifier = Modifier.fillMaxWidth()) {
-//            Box(
-//                modifier = Modifier
-//                    .height(200.dp)
-//                    .weight(1f)
-//                    .border(
-//                        width = 2.dp,
-//                        color = MaterialTheme.colorScheme.onBackground
-//                    )
-//            ) {
-//
-//            }
-//            Spacer(modifier = Modifier.width(4.dp))
-//            Box(
-//                modifier = Modifier
-//                    .weight(1f)
-//                    .height(200.dp)
-//                    .border(
-//                        width = 2.dp,
-//                        color = MaterialTheme.colorScheme.onBackground
-//                    )
-//            ) {
-//
-//            }
-//        }
-//
-//        Spacer(modifier = Modifier.height(14.dp))
+
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
