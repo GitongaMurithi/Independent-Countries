@@ -15,5 +15,8 @@ This is my very first jetpack compose project and i've really not grasped evryth
 For one reason or the, the back arrow on the home page is currently not working properly. 
 Am working on it.
 
-## Screenshots
+#### Encourage me by giving it star
 
+## Screenshots
+![](https://github.com/GitongaMurithi/Independent-Countries/blob/master/app/src/main/java/com/example/countries/screenshots/Screenshot%20(68).png)
+![](https://github.com/GitongaMurithi/Independent-Countries/blob/master/app/src/main/java/com/example/countries/screenshots/Screenshot%20(70).png)
