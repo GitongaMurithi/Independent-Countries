@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.countries.common.Constants
 import com.example.countries.common.Resource
+import com.example.countries.data.dto.toCountry
 import com.example.countries.domain.use_cases.GetCountryByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -33,7 +34,8 @@ class CountryInfoViewModel @Inject constructor(
         useCase(name).onEach { resource ->
             when (resource) {
                 is Resource.Success -> {
-                    _state.value = InfoScreenState(country = resource.data)
+                    _state.value = resource.data?.let { countryDtos ->
+                        InfoScreenState(country = countryDtos.map { it.toCountry() }) }!!
                 }
 
                 is Resource.Loading -> {

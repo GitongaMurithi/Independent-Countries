@@ -1,48 +1,68 @@
 package com.example.countries.presentation.countries_list
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
 import com.example.countries.common.Resource
+import com.example.countries.data.dto.toCountry
 import com.example.countries.domain.use_cases.GetCountriesUseCase
+import com.example.countries.domain.use_cases.GetCountryByNameUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CountryViewModel @Inject constructor(
-    private val useCase: GetCountriesUseCase
+    private val getCountriesUseCase: GetCountriesUseCase,
+    private val getCountryByNameUseCase: GetCountryByNameUseCase
 ) : ViewModel() {
 
-    private var _state: MutableState<CountryScreenState> = mutableStateOf(CountryScreenState())
-    val state: State<CountryScreenState> = _state
+    var state by mutableStateOf(CountryScreenState())
+        private set
 
-    lateinit var controller: NavController
+    private var job: Job? = null
 
-    private var _query = mutableStateOf(value = "")
-    val query: State<String> = _query
-
-//    private var _isActive = MutableStateFlow(value = false)
-//    val isActive = _isActive.asStateFlow()
-
-    fun onQueryChange(newQuery: String) {
-        _query.value = newQuery
-    }
-
-    // this function which action the ui sends to the viewModel
-
+    // this function represents which action the ui sends to the viewModel
     fun onAction(action: UserAction) {
         when (action) {
-            is UserAction.PopBackStack -> {
-                if (_query.value.isNotEmpty()) {
-                    _query.value = ""
+            UserAction.OnCloseIconClick -> {
+                state = state.copy(isSearchBarVisible = false)
+                getCountries()
+            }
+
+            UserAction.OnSearchIconClick -> {
+                state = state.copy(
+                    isSearchBarVisible = true,
+                    country = emptyList()
+                )
+            }
+
+            is UserAction.OnSearchQueryChanged -> {
+                state = state.copy(
+                    searchQuery = action.searchQuery
+                )
+                job?.cancel()
+                job = viewModelScope.launch {
+                    delay(1000)
+                    searchCountry(name = state.searchQuery)
+                }
+            }
+
+            is UserAction.OnCountryClick -> {
+                state = state.copy(selectedCountry = action.country)
+            }
+
+            is UserAction.OnRefresh -> {
+                if (state.searchQuery.isEmpty()) {
                     getCountries()
                 } else {
-                    controller.popBackStack()
+                    searchCountry(name = state.searchQuery)
                 }
             }
         }
@@ -52,30 +72,72 @@ class CountryViewModel @Inject constructor(
         getCountries()
     }
 
-    fun getCountries(search: String = "") {
-        useCase().onEach { resource ->
+    private fun getCountries() {
+        getCountriesUseCase().onEach { resource ->
             when (resource) {
                 is Resource.Loading -> {
-                    _state.value = CountryScreenState(isLoading = true)
+                    state = state.copy(
+                        isLoading = true,
+                        error = null
+                    )
                 }
 
                 is Resource.Success -> {
-                    _state.value = CountryScreenState(country = if (search.isEmpty()) {
-                        resource.data ?: emptyList()
-                    } else {
-                        resource.data?.filter { country ->
-                            country.name.contains(search, ignoreCase = true)
-                        } ?: emptyList()
-                    }
+                    state = state.copy(
+                        country = resource.data ?: emptyList(),
+                        isLoading = false
                     )
                 }
 
                 is Resource.Error -> {
-                    _state.value =
-                        CountryScreenState(error = "Could not reach the server! Check your internet connection")
+                    state = state.copy(
+                        error = "You could be offline. Or the server is down",
+                        isLoading = false,
+                        country = emptyList()
+                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
 
+    private fun searchCountry(name: String = "") {
+        if (name.isEmpty()) {
+            return
+        }
+        getCountryByNameUseCase(name = name).onEach { resource ->
+            when (resource) {
+                is Resource.Loading -> {
+                    state = state.copy(
+                        isLoading = true,
+                        error = null
+                    )
+                }
+
+                is Resource.Success -> {
+                    state = state.copy(
+                        country = resource.data?.map { it.toCountry() } ?: emptyList(),
+                        isLoading = false
+                    )
+                }
+
+                is Resource.Error -> {
+                    state = if (state.searchQuery.isEmpty()) {
+                        state.copy(
+                            error = "You could be offline. Or the server is down",
+                            isLoading = false,
+                            country = emptyList()
+                        )
+                    } else {
+                        state.copy(
+                            error = resource.message ?: "You could be offline. Or the server is down",
+                            isLoading = false,
+                            country = emptyList()
+                        )
+                    }
+
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
 }
+

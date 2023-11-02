@@ -55,7 +55,7 @@ data class CountryDto(
     @SerializedName("maps")
     val maps: Maps,
     @SerializedName("name")
-    val name: Name,
+    val name: Name?,
     @SerializedName("population")
     val population: Int,
     @SerializedName("postalCode")
@@ -80,8 +80,23 @@ data class CountryDto(
 
 fun CountryDto.toCountry() : Country {
     return Country(
-        name = name.common,
+        name = name,
         capital = capital,
+        population = population,
+        region = region,
+        demonym = demonyms,
+        area = area,
+        car = car,
+        cca2 = cca2,
+        cca3 = cca3,
+        ccn3 = ccn3,
+        fifa = fifa,
+        startOfWeek = startOfWeek,
+        subregion = subregion,
+        borders = borders,
+        flags = flags,
+        coatOfArms = coatOfArms.png,
+        cioc = cioc
 
     )
 }

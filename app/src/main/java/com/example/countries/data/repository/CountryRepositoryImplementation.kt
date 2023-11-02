@@ -2,7 +2,6 @@ package com.example.countries.data.repository
 
 import com.example.countries.data.CountriesApi
 import com.example.countries.data.dto.CountryDto
-import com.example.countries.data.dto1.CountryInfoDto
 import com.example.countries.domain.model.repository.CountryRepository
 import javax.inject.Inject
 
@@ -14,7 +13,7 @@ class CountryRepositoryImplementation @Inject constructor(
         return countryApi.getAllCountries()
     }
 
-    override suspend fun getCountryByName(name: String): List<CountryInfoDto> {
+    override suspend fun getCountryByName(name: String): List<CountryDto> {
         return countryApi.getCountryByName(name = name)
     }
 }

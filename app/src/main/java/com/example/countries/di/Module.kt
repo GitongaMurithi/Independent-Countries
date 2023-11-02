@@ -8,8 +8,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -19,8 +21,14 @@ object Module {
     @Provides
     @Singleton
     fun providesCountryApi(): CountriesApi {
+//        val okHttpClient = OkHttpClient.Builder()
+//            .connectTimeout(15, TimeUnit.SECONDS)
+//            .readTimeout(30, TimeUnit.SECONDS)
+//            .build()
+
     return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
+//        .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CountriesApi::class.java)

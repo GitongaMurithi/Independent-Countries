@@ -1,9 +1,9 @@
 package com.example.countries.domain.model
 
-import com.example.countries.data.dto1.Car
-import com.example.countries.data.dto1.Demonyms
-import com.example.countries.data.dto1.Flags
-import com.example.countries.data.dto1.Name
+import com.example.countries.data.dto.Car
+import com.example.countries.data.dto.Demonyms
+import com.example.countries.data.dto.Flags
+import com.example.countries.data.dto.Name
 
 data class CountryInfo(
     val name : Name?,
@@ -21,5 +21,5 @@ data class CountryInfo(
     val borders : List<String>?,
     val flags : Flags?,
     val coatOfArms : String?,
-    val cioc : String?,
+    val cioc : String?
 )

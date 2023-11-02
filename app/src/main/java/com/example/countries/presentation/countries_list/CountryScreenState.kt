@@ -6,6 +6,9 @@ import com.example.countries.domain.model.Country
 
 data class CountryScreenState (
     val isLoading : Boolean = false,
-    val country : List<Country>  = emptyList(),
-    val error : String = ""
+    val country : List<Country>?  = emptyList(),
+    val error : String? = "",
+    val searchQuery : String = "",
+    val isSearchBarVisible : Boolean = false,
+    val selectedCountry: Country? = null
 )

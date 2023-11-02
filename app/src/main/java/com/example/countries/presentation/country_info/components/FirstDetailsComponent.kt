@@ -29,19 +29,12 @@ import coil.compose.rememberAsyncImagePainter
 
 
 @Composable
-fun Details(text: String, flag: String , coa : String , flagDesc : String) {
+fun Details(
+    flag: String ,
+    coa : String ,
+    flagDesc : String
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = text,
-            style = TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -142,5 +135,7 @@ fun Details(text: String, flag: String , coa : String , flagDesc : String) {
 @Preview(showBackground = true)
 @Composable
 fun ComponentPreview() {
-    Details(text = "Kenya", flag = "" , coa = "" , flagDesc = "")
+    Details(
+        flag = "" , coa = "" ,
+        flagDesc = "")
 }
